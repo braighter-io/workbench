@@ -1,0 +1,29 @@
+# Layer sibling repos (each has its own .git)
+layers/*
+!layers/.gitkeep
+
+# Domain sibling repos (each has its own .git)
+domains/*
+!domains/.gitkeep
+
+# Attic is a sibling git repo (preservation only)
+attic/
+
+# Build / runtime artifacts
+node_modules/
+dist/
+.nx/
+.angular/
+tmp/
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local-only settings (Claude Code)
+.claude/settings.local.json
