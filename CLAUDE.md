@@ -11,6 +11,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Claude Code is always launched from this directory.** `.claude/` here applies to all work across the cluster. Do not launch Claude Code from inside a sibling repo (you would lose access to the agents and skills).
 
+## Substrate kernel — core model + governance (read first)
+
+The substrate is **internal infrastructure**, and its defining strength is **simplicity**: model the kernel **as simple as possible but as complex as required**. This is the *major principle every session must apply* — ratified in **[ADR-176](layers/specs/adr/adr-176-substrate-kernel-minimality-inclusion-test.md)**. When in doubt, the kernel does *less*; complexity belongs in packs.
+
+**The kernel is exactly four concerns** (north-star §20 P3; [ADR-127](layers/specs/adr/adr-127-kernel-substrate-v1.md)):
+1. **Recurse the plan** — a strictly single-parent tree of intervention nodes carrying typed effect declarations.
+2. **Flat the observation** — an append-only event log of what happened.
+3. **Inference** — plan + observations → posteriors (the digital twin).
+4. **Reproducibility** — versioned catalogs, run manifests, event-sourcing.
+
+**Inclusion test — before adding anything to the kernel, both must hold:** (a) it is one of the four concerns, **and** (b) it is needed by **≥2 packs** as shared infrastructure the kernel must validate/query/version. Both yes → kernel. Otherwise → pack territory (typed pack lib + `metadata` JSONB). Supporting rules:
+- **`metadata` JSONB is the deliberate simplicity boundary**, not a leak — the untyped per-pack extension space that keeps the typed core small.
+- **Promotion rule** — promote a `metadata` shape into the typed core *only* on demonstrated multi-pack need; demand-driven, never speculative.
+- **Store generators, derive graphs** — relationships derivable from tree + declarations (the causal DAG, comorbidity conflicts) are *views/materialized queries*, never stored state. Cross-links, if ever needed, are a separate `PlanNodeId` relation, **never** multi-parent.
+
+**Packs architecture:** packs **compose**, they do not author kernel concepts or UI components (bricks live in `design-system`, [ADR-168]; packs consume them). Domains consume layers via **published `@de-braighter/*` packages**, not relative paths ([ADR-027] pack-on-platform). Pack-specific representation/relationships live in the pack + `metadata`, never the kernel.
+
+**Depth (citable, in `layers/specs/`):** ADR-176 (kernel minimality + the inclusion test; ratified) · ADR-127 (kernel substrate v1) · ADR-154 (effect-declaration algebra) · ADR-027 (pack architecture) · north-star §9 (the "collapse into one substrate" thesis) + §20 (principles).
+
 ## Layout
 
 ```
@@ -38,12 +57,13 @@ de-braighter/                     ← this repo (de-braighter/workbench)
 └── attic/                        ← preservation repo (gitignored here)
 ```
 
-## What's scaffolded today (2026-05-24 foundation)
+## Cluster state (migration complete 2026-05-25)
 
-- The workbench repo itself (this repo) with canonical `.claude/`, policies, templates, workflows, project descriptors, and design docs.
-- **Not yet scaffolded:** any layer or domain repo. They come via follow-up plans in `docs/superpowers/plans/`.
+All layers and domains are migrated into the cluster, re-scoped `@de-braighter/*`, building green on `main`:
+- **Layers:** `substrate` (kernel — `@de-braighter/substrate-{contracts,runtime}`), `design-system`, `specs`, `platform`.
+- **Domains:** `exercir` (team sports — the live pack-football work), `conservation`, `vector`.
 
-The current Exercir / substrate / design-system / specs / platform code still lives in the prototype directories at `D:/development/projects/braighter/` and `D:/development/projects/exercir/`. Migration is incremental, per follow-up plans.
+The old prototype directories under `D:/development/projects/braighter/` and `/exercir/` are deleted (content lives in the cluster + git history). **Gate:** remote GitHub Actions is billing-blocked until ~June, so the working gate is **local** — `npm/pnpm run ci:local` per repo + shared SonarQube (`localhost:9000`). Never bypass pre-push hooks.
 
 ## Workflow rules
 
@@ -65,7 +85,7 @@ The current Exercir / substrate / design-system / specs / platform code still li
 
 - **Topology design**: `docs/superpowers/specs/2026-05-24-de-braighter-clean-structure-design.md`
 - **Foundation plan** (what scaffolded this): `docs/superpowers/plans/2026-05-24-de-braighter-foundation.md`
-- **North-star vision** (substrate framing): see the existing copy at `D:/development/projects/exercir/exercir-workbench/specs/exercir-specs/concepts/substrate/north-star-vision-capture-2026-05-17.md` until specs is scaffolded.
+- **North-star vision** (substrate framing): `layers/specs/concepts/substrate/north-star-vision-capture-2026-05-17.md` (citable §§3–9, §20, §21).
 
 ## What NOT to do
 
