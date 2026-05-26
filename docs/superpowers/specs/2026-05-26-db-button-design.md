@@ -22,7 +22,7 @@ This is **purely additive** — no change to any existing brick or to `<db-pitch
 | First slice | **One brick, done well** — `db-button` end-to-end (spec → plan → TDD → PR → publish) |
 | Which brick | **`db-button`** — most universal; sets the variant/size/state + token conventions later primitives reuse |
 | Element model | **Attribute directive on native element** — `button[db-button], a[db-button]` (not a wrapper component) |
-| Variants | **`primary` / `secondary` / `ghost` / `danger`** (complete-but-minimal; `link` deferred) |
+| Variants | **`primary` / `secondary` / `ghost` / `danger`** at brainstorm; **`link` added during live showcase review** (2026-05-26) — 5 total |
 | Sizes | **`sm` / `md` / `lg`** → `--density-{compact,default,comfortable}` (28 / 36 / 44px) |
 | States | **native `disabled`** (free on `<button>`) + **`loading`** (directive-managed, CSS-only spinner) |
 | Icons | **No input** — consumers project `<db-icon>`; CSS provides `gap` (YAGNI) |
@@ -41,7 +41,7 @@ This is **purely additive** — no change to any existing brick or to `<db-pitch
 - Showcase playground page `db-button.page.ts` + one `NAV_CATALOG` line under the `bricks` group.
 
 **Out (deferred — additive later, no API break):**
-- `link` variant; `block` / full-width input; explicit `disabled` input for anchors beyond loading.
+- `block` / full-width input; explicit `disabled` input for anchors beyond loading. (The `link` variant — initially deferred here — was pulled in during live review; see §2.)
 - Button **group / toolbar** brick; icon-only **affordance sugar** (consumers already compose `<db-icon>`).
 - Promotion of `button-classes.ts` into platform-agnostic `design-system-core` (do it when React needs the same logic — demand-driven).
 - Other primitives (input/field, card, tabs, badge) — each its own spec → plan → build cycle.
@@ -196,6 +196,6 @@ Per the repo's flaky TestBed reality (Analog/vitest-4), **all assertions target 
 
 ## 14. Future (demand-driven, additive)
 
-- `link` variant; `block`/full-width; explicit anchor `disabled`.
+- `block`/full-width; explicit anchor `disabled`. (The `link` variant shipped in 1.6.0.)
 - Promote `button-classes.ts` (or a `resolveButtonHost`) into `design-system-core` when a React implementation needs the same decision logic.
 - Sibling primitives: `db-card`, `db-input`/`db-field` (CVA), `db-tabs`, `db-badge` — each follows this pattern (pure module + thin Angular shell + tokens-only CSS).
