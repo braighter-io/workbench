@@ -1,0 +1,19 @@
+# de-braighter cluster repo manifest — read by the init-workbench skill.
+#
+# The cluster root (this repo, de-braighter/workbench) is already cloned; init-workbench
+# clones these sibling repos from the workbench's own origin org (de-braighter) into
+# layers/ and domains/. Each is its own git repo, gitignored at the cluster root.
+#
+# Add a repo here when a new layer or domain joins the cluster. Group decides the clone
+# target: layers/* -> layers/<name>, domains/* -> domains/<name>.
+repos:
+  layers:
+    - substrate       # kernel — @de-braighter/substrate-{contracts,runtime}
+    - design-system   # bricks / eyecatchers + design tokens
+    - specs           # knowledge layer — ADRs, concepts, handbook (no app code)
+    - platform        # infra-as-code + shared dev-Docker docs
+    - foundation      # shared foundation libraries
+  domains:
+    - exercir         # team sports (live pack-football work)
+    - conservation
+    - vector
