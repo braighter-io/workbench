@@ -48,7 +48,8 @@ de-braighter/                     ← this repo (de-braighter/workbench)
 │   ├── substrate/
 │   ├── design-system/
 │   ├── specs/
-│   └── platform/
+│   ├── platform/
+│   └── foundation/
 ├── domains/                      ← cluster: sibling domain repos (gitignored here)
 │   ├── exercir/
 │   ├── conservation/
@@ -60,7 +61,7 @@ de-braighter/                     ← this repo (de-braighter/workbench)
 ## Cluster state (migration complete 2026-05-25)
 
 All layers and domains are migrated into the cluster, re-scoped `@de-braighter/*`, building green on `main`:
-- **Layers:** `substrate` (kernel — `@de-braighter/substrate-{contracts,runtime}`), `design-system`, `specs`, `platform`.
+- **Layers:** `substrate` (kernel — `@de-braighter/substrate-{contracts,runtime}`), `design-system`, `specs`, `platform`, `foundation` (shared packages — `@de-braighter/{std,lint-kit,test-kit}`).
 - **Domains:** `exercir` (team sports — the live pack-football work), `conservation`, `vector`.
 
 The old prototype directories under `D:/development/projects/braighter/` and `/exercir/` are deleted (content lives in the cluster + git history). **Gate:** remote GitHub Actions is billing-blocked until ~June, so the working gate is **local** — `npm/pnpm run ci:local` per repo + shared SonarQube (`localhost:9000`). Never bypass pre-push hooks.
