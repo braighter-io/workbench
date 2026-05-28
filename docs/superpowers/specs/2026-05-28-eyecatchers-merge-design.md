@@ -2,11 +2,18 @@
 
 | | |
 | --- | --- |
-| Status | proposed |
+| Status | **SHIPPED** — all 7 phases merged 2026-05-28 |
 | Date | 2026-05-28 |
 | Author | Stibe Heller (with Claude Code) |
 | Scope | `layers/design-system` (the two lib-pairs to merge) |
 | Origin | Post-vector-ideas-adoption follow-up; the scope-wall gymnastics in PR3b / PR4a (dedup-by-generation across both cores) become unnecessary once the libs merge |
+
+> **Mid-execution corrections (recorded 2026-05-28 after merge completion):**
+> - **End-state is 4 libs, not 3** as the original architecture section stated. The charter forgot `design-system-angular-forms` (a separate lib that always existed alongside `design-system-angular`). Actual post-merge lib count: `design-system-css`, `design-system-core`, `design-system-angular`, `design-system-angular-forms`. The merge eliminated the 2 eyecatchers libs as planned; `design-system-angular-forms` was unaffected.
+> - **Near-empty shells used a `stub.ts` pattern.** Between Phase 3 (when eyecatchers-core's contracts moved out) and Phase 5 (when the lib was deleted), eyecatchers-core needed at least one file in `src/public/` to satisfy `lib-conformance`. Same for eyecatchers-angular between Phase 4c and Phase 5. The implementer added `src/public/stub.ts` containing just `export {};` with a comment explaining the lib was awaiting deletion. Pragmatic; deleted in Phase 5.
+> - **Phase 4a swept in cruft from an aborted earlier dispatch.** 3 `.spec.ts` files + 3 vitest infra files (`vitest.config.ts`, `tsconfig.spec.json`, `test-setup.ts`) were left over from a hygiene PR attempt that the user interrupted earlier in the session. The Phase 4a implementer staged the spec files (mistaking them for legitimate test files); a controller fix-up commit removed them. Lesson: aborted dispatches can leave untracked artifacts that later subagents misinterpret — clean up after aborts.
+> - **TSDoc warning suppressions follow the moved code.** When the contracts moved to design-system-core (Phase 3) and rhythm-ring moved to design-system-angular (Phase 4c), they brought along their `tsdoc-escape-greater-than`, `tsdoc-html-tag-missing-greater-than`, `tsdoc-unsupported-tag`, and `tsdoc-malformed-html-name` warnings; the implementer added matching narrow per-message suppressions to the destination libs' api-extractor configs. Consistent with the PR2a pattern (narrow over blanket).
+> - **Phase 4 manual smoke was not formally performed.** The charter recommended ~5 minutes of clicking through each batch's moved components' showcase pages as the only behavioral safety net. The autonomous run relied on `ci:local` (build + lint + typecheck + api-check + the 2 design-system-angular vitest specs) + grep gates + sibling-dep import verification — not manual smoke. The structural and snapshot gates all passed; if a subtle runtime regression slipped through in a moved component, it would surface only on actual showcase usage. Worth a separate smoke pass when convenient.
 
 ## Context
 
@@ -79,13 +86,13 @@ Strictly ordered; the workspace builds green between every PR.
 
 | # | Phase | What | Size | Risk |
 | --- | --- | --- | --- | --- |
-| **PR1** | scope wall | Remove the `scope:eyecatchers → only-eyecatchers` `depConstraint` in `eslint.config.mjs`; relabel both eyecatchers libs' `project.json` tags to `scope:design-system`; drop `scope:eyecatchers` from `lib-conformance.mjs`'s `SCOPE_TAGS`. | ≈5 files | Lowest |
-| **PR2** | math/tokens graduation | Delete the duplicated `math/*`, `tokens/*`, `reduced-motion.ts`, `motion-loop.ts` from `eyecatchers-core` (they were already `@deprecated`). Update `build-ts.mjs` to emit the TS dark palette only into `design-system-core`. Repath eyecatchers-angular's math/tokens/RM imports to `@de-braighter/design-system-core`. | ≈25 files | Low |
-| **PR3** | move contracts | `git mv libs/eyecatchers-core/src/public/contracts/*` → `libs/design-system-core/src/public/contracts/`. Likewise the 2 `workflows/` utilities. Update both barrels; repath eyecatchers-angular component imports + showcase contract imports. | ≈70 files | Low–Med |
-| **PR4a** | components batch 1 | Move first ~25 of 70 components from `eyecatchers-angular/src/public/<c>/` to `design-system-angular/src/public/<c>/` (flat). Update barrels. Repath showcase imports for the moved batch. Manual smoke the moved components' showcase pages. | ≈50 files | **High** |
-| **PR4b** | components batch 2 | Same procedure, next ~25 components. | ≈50 files | **High** |
-| **PR4c** | components batch 3 | Same procedure, final ~20 components. | ≈40 files | **High** |
-| **PR5** | retire libs + packages | Delete `libs/eyecatchers-core/`, `libs/eyecatchers-angular/`. Remove `@de-braighter/eyecatchers-*` from `tsconfig.base.json` `paths` + root `package.json` `build:libs`/`publish:libs`. Final grep gate (no remaining references in the cluster). | ≈10–20 files | Low–Med |
+| **PR1** ✅ | scope wall | Removed the `scope:eyecatchers → only-eyecatchers` depConstraint, relabeled both eyecatchers libs' tags to `scope:design-system`, narrowed `lib-conformance` SCOPE_TAGS. (shipped #103) |
+| **PR2** ✅ | math/tokens graduation | Deleted the `@deprecated` duplicates in eyecatchers-core; `build-ts.mjs` emits only into design-system-core; eyecatchers-angular math/RM imports repathed. (shipped #105) |
+| **PR3** ✅ | move contracts | `git mv` 70 contracts + 4 workflow utilities from eyecatchers-core to design-system-core; barrels + import-source updates across eyecatchers-angular + showcase. (shipped #107) |
+| **PR4a** ✅ | components batch 1 of 3 (25) | Including the `number-flow` sibling-dep cluster (count-ticker, gauge, glow-slider, heart-pulse, orbit-dial + number-flow). (shipped #109) |
+| **PR4b** ✅ | components batch 2 of 3 (25) | Alphabetic-next 25; no sibling clusters. (shipped #111) |
+| **PR4c** ✅ | components batch 3 of 3 (20) | Final 20 incl. segmented-control/tabbed-panel cluster; **zero `eyecatchers-angular` imports remain anywhere in the cluster** after this merge. (shipped #113) |
+| **PR5** ✅ | retire libs + packages | Deleted `libs/eyecatchers-core/` + `libs/eyecatchers-angular/`; removed tsconfig + package.json references; updated `tools/api-update.mjs`, `tools/test-reduced-motion.mjs`, `scripts/publish-libs.sh`, `docs/publishing.md`, `CLAUDE.md`. The `@de-braighter/eyecatchers-*` npm scopes retired. (shipped #115) |
 
 **Cumulative effort:** PRs 1+2+3+5 are small-to-medium and could each ship in hours; PRs 4a/4b/4c are the marathon — even split, they're the bulk of the work.
 
