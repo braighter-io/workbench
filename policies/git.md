@@ -45,7 +45,7 @@ One line per declared effect:
 Effect: <indicatorId> <predicted>±<sd> [basis]
 ```
 
-- `<indicatorId>` — e.g. `cycle-time`. **Today only `cycle-time` is auto-observed** (review latency in hours, derived from the merge timestamps); other indicators are captured but won't score until a metric source is wired into `pack-devloop`.
+- `<indicatorId>` — what you're predicting. Auto-observed today: `cycle-time` (hours) and `findings` (clean-wave count) are **self-observing** from the log; `coverage`, `smells`, `bugs`, `tech-debt`, `duplication`, `complexity` come from **SonarQube** (delta across the merge, when a token is configured). Other indicators are captured but won't score until an observer is wired into `pack-devloop`.
 - `<predicted>±<sd>` — point estimate and 1σ uncertainty (separator `±`, `+/-`, or `+-`). The score is a proper rule: an over-tight wrong interval is penalised, but so is a vague wide one — sharpness *and* accuracy both count, so state an honest `sd`.
 - `[basis]` — optional provenance: `literature | expert | tenant | derived | sham` (defaults to `derived`).
 
@@ -55,7 +55,7 @@ Example (a PR expected to merge quickly):
 Effect: cycle-time 6±2 expert
 ```
 
-**Orchestrator:** include an `Effect:` line whenever you can make a defensible prediction about a self-observed indicator (today: `cycle-time`); omit it rather than guess wildly. An empty or reflexive declaration teaches readers to ignore the field.
+**Orchestrator:** include an `Effect:` line whenever you can make a defensible prediction about an observed indicator (e.g. `cycle-time`, `findings`, `coverage`); omit it rather than guess wildly. An empty or reflexive declaration teaches readers to ignore the field.
 
 ## Branches
 
