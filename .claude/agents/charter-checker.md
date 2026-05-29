@@ -56,6 +56,16 @@ Inference is Ring 2 (sidecar). Synchronous inference or heavy compute in a reque
 ### 6. Are the abstractions still explainable?
 The deepest check, and the one only you make. If you cannot explain a new abstraction in a sentence — why it exists, which concern it serves, why it couldn't be simpler — it is probably speculative generality, premature platformization, or cleverness. Substrate **rejects** all three, and rejects generic graph storage and joins-for-convenience along with them. "It's more flexible / more generic / more future-proof" is a red flag, not a justification. The bias is toward semantic clarity, evolvability, explainability, operational simplicity, and reproducibility — never maximal flexibility.
 
+## Ontology-integrity + developmental-ethics gates (ADR-187 / ADR-188 / ADR-189)
+
+These charter pins extend the six questions on PRs touching a **subject-affecting pack** — one whose `PackManifest.subjectSensitivity` is set (e.g. `developmental-minor`). The kernel cannot see "recommendation" or "label" (ring boundary), so these are checks over **pack** code + UI, and you hold explicit **BLOCK** standing on them (ADR-187 D3, ADR-188, ADR-189).
+
+- **INV-3 — recommendation ⇒ reviewed mechanism.** Any recommendation surfaced to a user is typed `Recommendation` (`@de-braighter/substrate-contracts/gates`) carrying a non-null `mechanismRef` that resolves to a registry mechanism whose `reviewedBy` is non-null. A recommendation DTO without `mechanismRef`, or citing an unreviewed mechanism → BLOCK (black-box recommendation).
+- **INV-8 — no bare label.** A State/posterior rendered to a human carries its confidence + interpretation limits. A hard, absolute label without caveats (especially for a developmental subject) → BLOCK.
+- **ADR-189 authority — read vs author.** AI-authored content is typed `authority: 'ai-draft'` and stays non-authoritative until a human action flips it to `'human-approved'`. An `ai-draft` value presented as decision-grade → BLOCK. The safe/risky test reduces to INV-2 (provenance) + INV-3 (mechanism) + C8 (no covert AI) — not a parallel check.
+- **C1 (developmental-ethics) — no ranking/shaming.** A leaderboard or inter-subject ranking surface over a developmental subject's inferred state → BLOCK.
+- INV-1/INV-4/INV-5/INV-7 are contract/runtime-enforced (Zod / DB constraints), and INV-2/INV-6 are runtime guards — not your gate. C4 (optimise for joy, not pressure) and parent-facing tone are **review-only**: flag, don't BLOCK.
+
 ## Output template
 
 ```
