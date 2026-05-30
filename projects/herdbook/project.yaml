@@ -1,0 +1,43 @@
+# herdbook — breed-registry operational domain (the operational lens of the merged breed product)
+# Status: bootstrapping — specs drafted, no code yet; project charter being re-directed
+#         to the merged-product target (herdbook operations + conservation science, one product).
+# Form: pack-on-platform — composes the de-braighter substrate alongside the conservation pack
+#       (per the two-worlds-one-product decision; ADR-027 / ADR-192 pack-on-platform).
+# Decision: domains/herdbook/docs/superpowers/specs/2026-05-30-two-worlds-one-product-decision.md
+# Specs: domains/herdbook/docs/superpowers/specs/ (migration-design, data-model, epics-and-stories)
+
+name: herdbook
+domain: breed-registry
+status: bootstrapping
+repo: github.com/de-braighter/herdbook
+local: domains/herdbook/
+
+# Hints for orchestrator judgment, not enforcement. All agents and skills remain
+# available; these lists describe the typical curation. The herdbook is the
+# operational lens — registry CRUD, regulatory integrations, a FileMaker migration,
+# real member PII (Swiss data-protection) — so the curation skews backend + data
+# + UI + Swiss-compliance.
+enabled:
+  agents:
+    suggested:
+      - designer
+      - substrate-architect
+      - substrate-coder-pro
+      - implementer
+      - reviewer
+      - charter-checker
+      - qa-engineer
+      - local-ci
+      - prisma-pro
+      - swiss-pro
+      - ui-pro
+      - test-pro
+  skills:
+    suggested:
+      - architecture-concierge
+      - angular-architecture-concierge
+      - diff-refactor-engine
+      - story-runner
+      - md-quality-review
+      - reactive-forms-cva-governance
+      - nx-tag-architecture-governance
