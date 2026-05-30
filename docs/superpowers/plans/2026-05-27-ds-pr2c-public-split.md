@@ -4,7 +4,7 @@
 
 **Goal:** Rename each TS lib's `src/lib/` directory to `src/public/`, repoint its `src/index.ts` barrel, and add an ESLint guard banning deep imports into a sibling lib's internals — establishing the public-surface convention (uniform with the future PR2b generator) while the PR2a `.api.md` gate proves the move changes no public API.
 
-**Architecture:** Third sub-PR of charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-vector-ideas-adoption-design.md`, #2). Grounding confirmed all libs are 100% public — there is no internal-only code — so PR2c is a mechanical `lib/ → public/` rename + a deep-import guard. **No `internal/` directories are created** (demand-driven: the PR2b generator scaffolds `internal/` for new libs; existing libs add it only when a real internal first appears). The `.api.md` snapshots from PR2a MUST stay byte-identical after each move — that is the proof the public surface is unchanged.
+**Architecture:** Third sub-PR of charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-ideas-adoption-design.md`, #2). Grounding confirmed all libs are 100% public — there is no internal-only code — so PR2c is a mechanical `lib/ → public/` rename + a deep-import guard. **No `internal/` directories are created** (demand-driven: the PR2b generator scaffolds `internal/` for new libs; existing libs add it only when a real internal first appears). The `.api.md` snapshots from PR2a MUST stay byte-identical after each move — that is the proof the public surface is unchanged.
 
 **Tech Stack:** Nx (npm), ng-packagr (3 libs) + `@nx/js:tsc` (2 libs), `@microsoft/api-extractor` verify-mode gate (`nx api-check`), `@nx/eslint-plugin` flat config.
 
