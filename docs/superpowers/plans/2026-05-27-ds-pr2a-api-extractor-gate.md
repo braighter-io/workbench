@@ -4,7 +4,7 @@
 
 **Goal:** Install `@microsoft/api-extractor`, commit a `.api.md` public-surface snapshot for each of the 5 TS libs, add a CI `api-check` target that fails on public-API drift, and add an `exports`-resolution gate for the CSS lib — so no future PR can change a public surface without a reviewable diff.
 
-**Architecture:** First of three sub-PRs decomposing charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-vector-ideas-adoption-design.md`, item #2). PR2a delivers the *protection* (drift gate). PR2c (later) does the physical `public/internal` reshuffle — protected by this gate (the reshuffle is correct iff the `.api.md` snapshots don't drift). PR2b (later) builds the #5 generator. PR2a does NOT move any files or change any lib's `src/` layout.
+**Architecture:** First of three sub-PRs decomposing charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-ideas-adoption-design.md`, item #2). PR2a delivers the *protection* (drift gate). PR2c (later) does the physical `public/internal` reshuffle — protected by this gate (the reshuffle is correct iff the `.api.md` snapshots don't drift). PR2b (later) builds the #5 generator. PR2a does NOT move any files or change any lib's `src/` layout.
 
 **Tech Stack:** Nx (npm), `@microsoft/api-extractor` (CLI `api-extractor run`), TypeScript 5.9.2. Build outputs: the 3 tsc libs (`design-system-core`, `eyecatchers-core`, `design-system-css`) emit `dist/libs/<lib>/src/index.d.ts`; the 3 ng-packagr libs (`design-system-angular`, `design-system-angular-forms`, `eyecatchers-angular`) emit a flattened `dist/libs/<lib>/index.d.ts` (+ `de-braighter-<lib>.d.ts`).
 
@@ -460,11 +460,11 @@ git push -u origin chore/ds-pr2a-api-extractor-gate
 - [ ] **Step 3: Create the story issue + PR**
 
 ```bash
-gh issue create --title "PR2a: api-extractor public-API drift gate + css exports gate" --body "Story for PR2a of the vector-ideas adoption charter (#2). Installs api-extractor, commits .api.md snapshots for the 5 TS libs, adds a CI api-check drift gate, and an exports-resolution gate for design-system-css. No file moves (the physical public/internal split is PR2c). This repo has no type/story label taxonomy, so filed unlabeled."
+gh issue create --title "PR2a: api-extractor public-API drift gate + css exports gate" --body "Story for PR2a of the design-system adoption charter (#2). Installs api-extractor, commits .api.md snapshots for the 5 TS libs, adds a CI api-check drift gate, and an exports-resolution gate for design-system-css. No file moves (the physical public/internal split is PR2c). This repo has no type/story label taxonomy, so filed unlabeled."
 ```
 Record the issue number (call it `NN`), then:
 ```bash
-gh pr create --base main --title "chore: api-extractor public-API drift gate (charter PR2a)" --body "PR2a of the vector-ideas adoption charter (#2).
+gh pr create --base main --title "chore: api-extractor public-API drift gate (charter PR2a)" --body "PR2a of the design-system adoption charter (#2).
 
 Closes #NN
 

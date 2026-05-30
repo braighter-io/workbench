@@ -4,7 +4,7 @@
 
 **Goal:** Add a `check-lib-conformance` script (wired into `ci:local`) that fails if any lib drifts from the conforming shape — correct tags, `src/public` + barrel, `api-extractor.json` + committed `.api.md`, `api-check` target, tsconfig path alias — plus a short "how to add a lib" doc. This delivers charter #5's *end* (libs conform; no divergent hand-created libs) via continuous enforcement rather than a code generator.
 
-**Architecture:** Final sub-PR of charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-vector-ideas-adoption-design.md`, #5). **Reinterprets #5's means:** the charter proposed an nx generator (`nx g ds:lib`); grounding showed new libs are rare and there are two build flavors (tsc-agnostic + ng-packagr-Angular), so a continuous *conformance check* — which catches drift across ALL libs, not just at creation — is the higher-value, lower-maintenance, more demand-driven enforcement. No code generator is built. (Builds on PR2a's api-extractor gate + PR2c's `public/` split, both merged to `main`.)
+**Architecture:** Final sub-PR of charter PR2 (`docs/superpowers/specs/2026-05-27-design-system-ideas-adoption-design.md`, #5). **Reinterprets #5's means:** the charter proposed an nx generator (`nx g ds:lib`); grounding showed new libs are rare and there are two build flavors (tsc-agnostic + ng-packagr-Angular), so a continuous *conformance check* — which catches drift across ALL libs, not just at creation — is the higher-value, lower-maintenance, more demand-driven enforcement. No code generator is built. (Builds on PR2a's api-extractor gate + PR2c's `public/` split, both merged to `main`.)
 
 **Tech Stack:** Node ESM script (no deps), Nx 22.7 (npm), JSON/JSONC config parsing.
 
@@ -238,11 +238,11 @@ git push -u origin chore/ds-pr2b-lib-conformance
 
 - [ ] **Step 3: Story issue + PR**
 ```bash
-gh issue create --title "PR2b: lib-conformance CI gate + adding-a-lib doc" --body "Story for PR2b of the vector-ideas adoption charter (#5). Reinterprets #5's means: instead of an nx generator, a continuous check-lib-conformance gate (wired into ci:local) that validates EVERY lib matches the conforming shape (tags, src/public + barrel, api-extractor.json + etc/*.api.md, api-check target, tsconfig path alias; css lib checked for its check-css-exports gate), plus a docs/adding-a-lib.md template. New libs are rare + dual-flavor, so a continuous check is higher-value/lower-maintenance than a generator and catches drift across all libs. This repo has no type/story label taxonomy, so filed unlabeled."
+gh issue create --title "PR2b: lib-conformance CI gate + adding-a-lib doc" --body "Story for PR2b of the design-system adoption charter (#5). Reinterprets #5's means: instead of an nx generator, a continuous check-lib-conformance gate (wired into ci:local) that validates EVERY lib matches the conforming shape (tags, src/public + barrel, api-extractor.json + etc/*.api.md, api-check target, tsconfig path alias; css lib checked for its check-css-exports gate), plus a docs/adding-a-lib.md template. New libs are rare + dual-flavor, so a continuous check is higher-value/lower-maintenance than a generator and catches drift across all libs. This repo has no type/story label taxonomy, so filed unlabeled."
 ```
 Record the issue number `NN`, then:
 ```bash
-gh pr create --base main --title "chore: lib-conformance CI gate + adding-a-lib doc (charter PR2b)" --body "PR2b of the vector-ideas adoption charter (#5) — the conformance-check interpretation.
+gh pr create --base main --title "chore: lib-conformance CI gate + adding-a-lib doc (charter PR2b)" --body "PR2b of the design-system adoption charter (#5) — the conformance-check interpretation.
 
 Closes #NN
 
